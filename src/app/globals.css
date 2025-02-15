@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .page-transition {
+    @apply animate-fade-in;
+  }
+  
+  .card-transition {
+    @apply animate-scale-in;
+  }
+  
+  .list-item-transition {
+    @apply animate-slide-in;
+  }
+  
+  .highlight-transition {
+    @apply animate-bounce-in;
+  }
+  
+  .loading-spin {
+    @apply animate-spin;
+  }
+}
+
 :root {
   --primary-dark: 1, 2, 33;      /* Navy */
   --primary-accent: 10, 115, 115; /* Teal */
@@ -74,23 +96,6 @@ input[type="range"]::-moz-range-thumb {
   @apply focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2;
 }
 
-/* Animation utilities */
-.page-transition {
-  @apply animate-fade-in;
-}
-
-.card-transition {
-  @apply animate-scale-in;
-}
-
-.list-item-transition {
-  @apply animate-slide-in;
-}
-
-.highlight-transition {
-  @apply animate-bounce-in;
-}
-
 /* Interactive elements */
 .interactive-hover {
   @apply transform transition-all duration-200 hover:scale-105;
@@ -103,11 +108,6 @@ input[type="range"]::-moz-range-thumb {
 /* Link styles */
 .link {
   @apply text-teal-600 hover:text-teal-800 transition-all duration-200 hover:-translate-y-0.5;
-}
-
-/* Loading states */
-.loading-spin {
-  @apply animate-spin-slow;
 }
 
 /* Hover card effect */

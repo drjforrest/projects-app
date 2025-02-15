@@ -6,6 +6,8 @@ export interface ProjectSettings {
     defaultMeetingDuration: number; // minutes
     autoCreateMilestones: boolean;
     reminderLeadTime: number; // days before deadline
+    autoPromptFeedback: boolean;
+    retrospectiveTemplate: 'standard' | 'detailed' | 'minimal';
 }
 
 export interface NotificationSettings {

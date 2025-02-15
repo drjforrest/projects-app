@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { useProject } from '@/context/ProjectContext';
 import { DBMeeting } from '@/types/database';
@@ -23,7 +25,7 @@ export const MeetingForm: React.FC<MeetingFormProps> = ({
         description: '',
         attendees: [],
         quick_notes: '',
-        date_time: new Date().toISOString(),
+        date_time: new Date(),
         transcript_path: '',
         summary_path: '',
         summary_content: '',
@@ -61,7 +63,18 @@ export const MeetingForm: React.FC<MeetingFormProps> = ({
                 await updateMeeting(initialData.meeting_id, formData);
                 meetingId = initialData.meeting_id;
             } else {
-                meetingId = await createMeeting(formData);
+                const meetingData = {
+                    project_id: projectId,
+                    meeting_name: formData.meeting_name || '',
+                    description: formData.description || '',
+                    attendees: formData.attendees || [],
+                    quick_notes: formData.quick_notes || '',
+                    date_time: formData.date_time || new Date(),
+                    transcript_path: formData.transcript_path || '',
+                    summary_path: formData.summary_path || '',
+                    summary_content: formData.summary_content || ''
+                };
+                meetingId = await createMeeting(meetingData);
             }
             onSubmit?.(meetingId);
         } catch (error) {
@@ -124,7 +137,7 @@ export const MeetingForm: React.FC<MeetingFormProps> = ({
                         onChange={(e) => {
                             const time = formData.date_time ? new Date(formData.date_time).toTimeString() : '00:00';
                             const newDateTime = new Date(`${e.target.value}T${time}`).toISOString();
-                            setFormData(prev => ({ ...prev, date_time: newDateTime }));
+                            setFormData(prev => ({ ...prev, date_time: new Date(newDateTime) }));
                         }}
                         className={`input-field ${errors.date_time ? 'border-rust-500' : 'hover:border-teal-400'}`}
                     />
@@ -141,7 +154,7 @@ export const MeetingForm: React.FC<MeetingFormProps> = ({
                         onChange={(e) => {
                             const date = formData.date_time ? new Date(formData.date_time).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
                             const newDateTime = new Date(`${date}T${e.target.value}`).toISOString();
-                            setFormData(prev => ({ ...prev, date_time: newDateTime }));
+                            setFormData(prev => ({ ...prev, date_time: new Date(newDateTime) }));
                         }}
                         className={`input-field ${errors.date_time ? 'border-rust-500' : 'hover:border-teal-400'}`}
                     />

@@ -1,17 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { query } from '@/config/database';
 import { DBOutput } from '@/types/database';
 
-type QueryParam = string | number | Date;
+type QueryParam = string | number | Date | string[] | number[] | null;
 
 export async function GET(
-    request: NextRequest,
-    { params }: { params: { id: string } }
+    request: Request,
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await context.params;
         const result = await query(
             'SELECT * FROM outputs WHERE output_id = $1',
-            [params.id]
+            [id]
         );
 
         if (result.rows.length === 0) {
@@ -32,10 +33,11 @@ export async function GET(
 }
 
 export async function PUT(
-    request: NextRequest,
-    { params }: { params: { id: string } }
+    request: Request,
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await context.params;
         const data: Partial<DBOutput> = await request.json();
         const updateFields: string[] = [];
         const values: QueryParam[] = [];
@@ -56,17 +58,17 @@ export async function PUT(
             );
         }
 
-        values.push(params.id);
+        values.push(id);
         await query(
             `UPDATE outputs 
             SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP 
             WHERE output_id = $${valueCounter}`,
-            values
+            values as (string | number | boolean | Date | string[] | null)[]
         );
 
         const result = await query(
             'SELECT * FROM outputs WHERE output_id = $1',
-            [params.id]
+            [id]
         );
 
         return NextResponse.json(result.rows[0]);
@@ -80,13 +82,14 @@ export async function PUT(
 }
 
 export async function DELETE(
-    request: NextRequest,
-    { params }: { params: { id: string } }
+    request: Request,
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await context.params;
         const result = await query(
             'DELETE FROM outputs WHERE output_id = $1 RETURNING *',
-            [params.id]
+            [id]
         );
 
         if (result.rows.length === 0) {

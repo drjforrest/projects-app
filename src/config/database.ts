@@ -1,13 +1,16 @@
 import { Pool, PoolClient, QueryResult } from 'pg';
-import { config } from './index';
 
-export const pool = new Pool({
-    user: config.db.user,
-    password: config.db.password,
-    host: config.db.host,
-    port: config.db.port,
-    database: config.db.database,
-});
+let pool: Pool;
+
+if (typeof window === 'undefined') {
+    pool = new Pool({
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        host: process.env.DB_HOST,
+        port: Number(process.env.DB_PORT),
+        database: process.env.DB_NAME,
+    });
+}
 
 // Add error handling
 pool.on('error', (err) => {
@@ -43,4 +46,4 @@ export const transaction = async <T>(callback: (client: PoolClient) => Promise<T
     }
 };
 
-export default pool; 
+export { pool }; 

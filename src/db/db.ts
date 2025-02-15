@@ -9,7 +9,10 @@ const pool = new Pool({
     database: config.db.database,
 });
 
-export const query = async (text: string, params?: any[]) => {
+export const query = async (
+    text: string, 
+    params?: (string | number | boolean | Date | null | string[])[]
+) => {
     const start = Date.now();
     try {
         const res = await pool.query(text, params);
@@ -23,3 +26,19 @@ export const query = async (text: string, params?: any[]) => {
 };
 
 export const getClient = () => pool.connect();
+
+export const executeQuery = async (
+    query: string, 
+    params: (string | number | boolean | Date | null)[] = []
+) => {
+    const start = Date.now();
+    try {
+        const res = await pool.query(query, params);
+        const duration = Date.now() - start;
+        console.log('Executed query', { query, duration, rows: res.rowCount });
+        return res;
+    } catch (error) {
+        console.error('Database query error:', error);
+        throw error;
+    }
+};

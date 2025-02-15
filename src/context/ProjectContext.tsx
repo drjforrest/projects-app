@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useReducer, useCallback } from 'react';
 import { DBProject, DBOutput, DBMeeting, ProjectRetrospective } from '@/types/database';
 import * as api from '@/lib/api';
@@ -79,9 +81,9 @@ function projectReducer(state: ProjectState, action: ProjectAction): ProjectStat
             return {
                 ...state,
                 projects: state.projects.map(project =>
-                    project.project_id === action.payload.project_id ? action.payload : project
+                    project.id === action.payload.id ? action.payload : project
                 ),
-                currentProject: state.currentProject?.project_id === action.payload.project_id
+                currentProject: state.currentProject?.id === action.payload.id
                     ? action.payload
                     : state.currentProject,
             };

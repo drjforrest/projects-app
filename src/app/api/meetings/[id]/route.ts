@@ -1,16 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import * as meetingsDb from '@/db/meetings';
 import { query } from '@/config/database';
 import { DBMeeting } from '@/types/database';
 
-type QueryParam = string | number | Date;
+type QueryParam = string | number | Date | string[] | number[] | null;
 
-export async function PUT(
-    request: NextRequest,
-    { params }: { params: { id: string } }
+export async function GET(
+    request: Request,
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const meetingId = parseInt(params.id);
+        const { id } = await context.params;
+        const meeting = await meetingsDb.getMeeting(parseInt(id));
+        return NextResponse.json(meeting);
+    } catch (error) {
+        console.error('Error fetching meeting:', error);
+        return NextResponse.json(
+            { error: 'Failed to fetch meeting' },
+            { status: 500 }
+        );
+    }
+}
+
+export async function PUT(
+    request: Request,
+    context: { params: Promise<{ id: string }> }
+) {
+    try {
+        const { id } = await context.params;
+        const meetingId = parseInt(id);
         const data: Partial<DBMeeting> = await request.json();
         const updateFields: string[] = [];
         const values: QueryParam[] = [];
@@ -36,7 +54,7 @@ export async function PUT(
             `UPDATE meetings 
             SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP 
             WHERE meeting_id = $${valueCounter}`,
-            values
+            values as (string | number | boolean | string[] | Date | null)[]
         );
 
         const result = await query(
@@ -54,41 +72,15 @@ export async function PUT(
     }
 }
 
-export async function GET(
-    request: NextRequest,
-    { params }: { params: { id: string } }
-) {
-    try {
-        const result = await query(
-            'SELECT * FROM meetings WHERE meeting_id = $1',
-            [params.id]
-        );
-
-        if (result.rows.length === 0) {
-            return NextResponse.json(
-                { error: 'Meeting not found' },
-                { status: 404 }
-            );
-        }
-
-        return NextResponse.json(result.rows[0]);
-    } catch (error) {
-        console.error('Error fetching meeting:', error);
-        return NextResponse.json(
-            { error: 'Failed to fetch meeting' },
-            { status: 500 }
-        );
-    }
-}
-
 export async function DELETE(
-    request: NextRequest,
-    { params }: { params: { id: string } }
+    request: Request,
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await context.params;
         const result = await query(
             'DELETE FROM meetings WHERE meeting_id = $1 RETURNING *',
-            [params.id]
+            [id]
         );
 
         if (result.rows.length === 0) {

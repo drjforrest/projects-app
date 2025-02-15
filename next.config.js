@@ -10,8 +10,24 @@ const nextConfig = {
   images: {
     unoptimized: false, // Enable image optimization
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        net: false,
+        dns: false,
+        fs: false,
+        tls: false,
+        'pg-native': false
+      };
+    }
+    return config;
+  },
   experimental: {
-    serverActions: true,
+    serverActions: {
+      allowedOrigins: ['localhost:3000']
+    },
+    typedRoutes: true
   }
 }
 

@@ -1,4 +1,6 @@
-                                   import React, { useState } from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import { useProject } from '@/context/ProjectContext';
 import { DBOutput } from '@/types/database';
 

@@ -67,7 +67,11 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                     ${error ? 'border-rust-500' : ''}
                 `}
             >
-                <input {...getInputProps()} />
+                <input 
+                    {...getInputProps()} 
+                    accept={accept}
+                    disabled={uploading}
+                />
                 <div className="text-center">
                     {uploading ? (
                         <div className="flex items-center justify-center">

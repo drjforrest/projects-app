@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query, transaction } from '@/config/database';
-import { ProjectStartFormData } from '@/types/project';
+import { ProjectCreateRequest } from '@/types/api';
 
 export async function GET(request: NextRequest) {
     try {
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
         const status = searchParams.get('status');
 
         let queryText = 'SELECT * FROM projects';
-        const queryParams: any[] = [];
+        const queryParams: (string | number)[] = [];
 
         if (status) {
             queryText += ' WHERE status = $1';
@@ -28,9 +28,9 @@ export async function GET(request: NextRequest) {
     }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<Response> {
     try {
-        const data: ProjectStartFormData = await request.json();
+        const body: ProjectCreateRequest = await request.json();
 
         const result = await transaction(async (client) => {
             const insertResult = await client.query(
@@ -43,20 +43,20 @@ export async function POST(request: NextRequest) {
                 ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
                 RETURNING project_id`,
                 [
-                    data.projectName,
-                    data.startDate,
-                    data.category,
-                    data.types,
-                    data.backgroundContext,
-                    data.objective,
-                    data.mainDeliverable,
-                    data.toWhom,
-                    data.dueDate,
-                    data.numberOfMilestones,
-                    JSON.stringify(data.milestones),
-                    JSON.stringify(data.resources),
-                    data.anticipatedDifficulty,
-                    data.additionalNotes
+                    body.projectName,
+                    body.startDate,
+                    body.category,
+                    body.types,
+                    body.backgroundContext,
+                    body.objective,
+                    body.mainDeliverable,
+                    body.toWhom,
+                    body.dueDate,
+                    body.numberOfMilestones,
+                    JSON.stringify(body.milestones),
+                    JSON.stringify(body.resources),
+                    body.anticipatedDifficulty,
+                    body.additionalNotes
                 ]
             );
 

@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import { DBMeeting } from '@/types/database';
 import { ProjectCard } from '@/components/project/ProjectCard';
 import { MeetingCard } from '@/components/meeting/MeetingCard';
+import type { Route } from 'next';
 
 async function ProjectStats() {
   const activeProjects = await getActiveProjects();
@@ -70,7 +71,7 @@ async function ProjectStats() {
           <div className="p-6 border-b border-gray-200 flex justify-between items-center">
             <h2 className="text-xl font-semibold text-navy-900">Upcoming Meetings</h2>
             <Link 
-              href="/meetings" 
+              href={'/meetings' as Route}
               className="text-sm text-teal-600 hover:text-teal-700"
             >
               View All →

@@ -1,5 +1,4 @@
 import { query } from '@/config/database';
-import { logger } from '@/utils/logger';
 
 export const calculateProjectProgress = async (projectId: number) => {
     const result = await query(`

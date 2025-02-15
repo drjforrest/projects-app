@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { query, transaction } from '@/config/database';
 import { DBMeeting } from '@/types/database';
 
-type QueryParam = string | number | Date;
+type QueryParam = string | number | Date | string[] | number[] | null;
 
 export async function GET(request: NextRequest) {
     try {
@@ -47,7 +47,10 @@ export async function GET(request: NextRequest) {
 
         queryText += ' ORDER BY date_time ASC';
 
-        const result = await query(queryText, queryParams);
+        const result = await query(
+            queryText, 
+            queryParams as (string | number | boolean | Date | string[] | null)[]
+        );
         return NextResponse.json(result.rows);
     } catch (error) {
         console.error('Error fetching meetings:', error);

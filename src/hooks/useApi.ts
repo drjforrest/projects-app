@@ -4,17 +4,17 @@ interface ApiHookResult<T, E = Error> {
     data: T | null;
     loading: boolean;
     error: E | null;
-    execute: (...args: any[]) => Promise<void>;
+    execute: (...args: unknown[]) => Promise<T>;
     reset: () => void;
 }
 
-export function useApi<T, E = Error>(
-    apiFunction: (...args: any[]) => Promise<T>,
+export function useApi<T = unknown, E = Error>(
+    apiFunction: (...args: unknown[]) => Promise<T>,
     options?: {
         onSuccess?: (data: T) => void;
         onError?: (error: E) => void;
         immediate?: boolean;
-        initialArgs?: any[];
+        initialArgs?: unknown[];
     }
 ): ApiHookResult<T, E> {
     const [data, setData] = useState<T | null>(null);
@@ -22,7 +22,7 @@ export function useApi<T, E = Error>(
     const [error, setError] = useState<E | null>(null);
 
     const execute = useCallback(
-        async (...args: any[]) => {
+        async (...args: unknown[]) => {
             try {
                 setLoading(true);
                 setError(null);

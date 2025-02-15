@@ -9,7 +9,7 @@ interface MarkdownFieldProps {
     placeholder?: string;
 }
 
-const MarkdownField: React.FC<MarkdownFieldProps> = ({ 
+export const MarkdownField: React.FC<MarkdownFieldProps> = ({ 
     value, 
     onChange, 
     label,

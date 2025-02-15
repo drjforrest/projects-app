@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-import { useProject } from '@/context/ProjectContext';
 import { DBProject } from '@/types/database';
 
 interface ProjectSelectorProps {

@@ -115,7 +115,7 @@ export default function Settings() {
                   <select
                     value={settings.project.retrospectiveTemplate}
                     onChange={(e) => updateProjectSettings({
-                      retrospectiveTemplate: e.target.value
+                      retrospectiveTemplate: e.target.value as 'standard' | 'detailed' | 'minimal'
                     })}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   >

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query, transaction } from '@/config/database';
-import { DBOutput } from '@/types/database';
+import { OutputRequestBody } from '@/types/api';
 
 export async function GET(request: NextRequest) {
     try {
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
         const search = searchParams.get('search');
 
         let queryText = 'SELECT * FROM outputs';
-        const queryParams: any[] = [];
+        const queryParams: (string | number)[] = [];
 
         if (projectId) {
             queryText += ' WHERE project_id = $1';
@@ -35,9 +35,9 @@ export async function GET(request: NextRequest) {
     }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<Response> {
     try {
-        const data: Omit<DBOutput, 'output_id' | 'created_at' | 'updated_at'> = await request.json();
+        const body: OutputRequestBody = await request.json();
 
         const result = await transaction(async (client) => {
             const insertResult = await client.query(
@@ -48,14 +48,14 @@ export async function POST(request: NextRequest) {
                 ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
                 RETURNING output_id`,
                 [
-                    data.project_id,
-                    data.output_name,
-                    data.description,
-                    data.version_number,
-                    data.tags,
-                    data.next_action,
-                    data.feedback_to,
-                    data.time_allocated
+                    body.projectId,
+                    body.outputName,
+                    body.description,
+                    body.versionNumber,
+                    body.tags,
+                    body.nextAction,
+                    body.feedbackTo,
+                    body.timeAllocated
                 ]
             );
 

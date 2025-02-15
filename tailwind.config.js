@@ -1,9 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -83,42 +81,35 @@ module.exports = {
       borderRadius: {
         'xl': '1rem',
       },
+      keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'slide-in': {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        'scale-in': {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' }
+        },
+        'bounce-in': {
+          '0%': { transform: 'scale(0.3)', opacity: '0' },
+          '50%': { transform: 'scale(1.05)', opacity: '0.8' },
+          '70%': { transform: 'scale(0.9)', opacity: '0.9' },
+          '100%': { transform: 'scale(1)', opacity: '1' }
+        },
+      },
+      animation: {
+        'fade-in': 'fade-in 0.3s ease-in-out',
+        'slide-in': 'slide-in 0.3s ease-out',
+        'scale-in': 'scale-in 0.3s ease-out',
+        'bounce-in': 'bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+      }
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
+    import('@tailwindcss/forms').then(forms => forms.default),
   ],
-  extend: {
-    keyframes: {
-      'fade-in': {
-        '0%': { opacity: '0' },
-        '100%': { opacity: '1' }
-      },
-      'slide-in': {
-        '0%': { transform: 'translateY(10px)', opacity: '0' },
-        '100%': { transform: 'translateY(0)', opacity: '1' }
-      },
-      'scale-in': {
-        '0%': { transform: 'scale(0.95)', opacity: '0' },
-        '100%': { transform: 'scale(1)', opacity: '1' }
-      },
-      'bounce-in': {
-        '0%': { transform: 'scale(0.3)', opacity: '0' },
-        '50%': { transform: 'scale(1.05)', opacity: '0.8' },
-        '70%': { transform: 'scale(0.9)', opacity: '0.9' },
-        '100%': { transform: 'scale(1)', opacity: '1' }
-      },
-      'spin-slow': {
-        '0%': { transform: 'rotate(0deg)' },
-        '100%': { transform: 'rotate(360deg)' }
-      }
-    },
-    animation: {
-      'fade-in': 'fade-in 0.3s ease-out',
-      'slide-in': 'slide-in 0.4s ease-out',
-      'scale-in': 'scale-in 0.3s ease-out',
-      'bounce-in': 'bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-      'spin-slow': 'spin-slow 3s linear infinite'
-    },
-  }
 }

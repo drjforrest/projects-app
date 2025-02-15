@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { ProjectStartFormData, ProjectCategory, ProjectType } from '@/types/project';
 import { validateProjectStartForm } from '@/utils/validation';

@@ -1,3 +1,5 @@
+'use client';
+
 import { useProject } from '@/context/ProjectContext';
 import { useState, useEffect } from 'react';
 import { MarkdownField } from '@/components/MarkdownField';
@@ -5,6 +7,7 @@ import { addProjectRetrospective } from '@/services/feedback';
 import { useRouter } from 'next/navigation';
 import { Alert } from '@/components/ui/alert';
 import { Spinner } from '@/components/ui/spinner';
+import type { Route } from 'next';
 
 interface FormData {
     completionStatus: 'completed' | 'partially_completed' | 'cancelled' | 'on_hold';
@@ -49,7 +52,7 @@ export default function CloseProject() {
 
         try {
             await addProjectRetrospective({
-                projectId: currentProject.project_id,
+                projectId: currentProject.id,
                 completionDate: new Date(formData.completionDate),
                 completionStatus: formData.completionStatus,
                 deliverablesSummary: formData.deliverablesSummary,
@@ -66,7 +69,8 @@ export default function CloseProject() {
                 nextSteps: formData.nextSteps
             });
 
-            router.push(`/projects/${currentProject.project_id}`);
+            const route = `/projects/${currentProject.id}` as Route;
+            router.push(route);
         } catch (error) {
             setError(error instanceof Error ? error.message : 'Failed to close project');
             console.error('Failed to close project:', error);
@@ -79,20 +83,20 @@ export default function CloseProject() {
     useEffect(() => {
         const saveTimeout = setTimeout(() => {
             if (isSubmitting) return;
-            localStorage.setItem(`project-close-draft-${currentProject?.project_id}`, JSON.stringify(formData));
+            localStorage.setItem(`project-close-draft-${currentProject?.id}`, JSON.stringify(formData));
         }, 30000);
 
         return () => clearTimeout(saveTimeout);
-    }, [formData, currentProject?.project_id, isSubmitting]);
+    }, [formData, currentProject?.id, isSubmitting]);
 
     // Load draft on mount
     useEffect(() => {
-        if (!currentProject?.project_id) return;
-        const draft = localStorage.getItem(`project-close-draft-${currentProject.project_id}`);
+        if (!currentProject?.id) return;
+        const draft = localStorage.getItem(`project-close-draft-${currentProject.id}`);
         if (draft) {
             setFormData(JSON.parse(draft));
         }
-    }, [currentProject?.project_id]);
+    }, [currentProject?.id]);
 
     if (!currentProject) {
         return (
