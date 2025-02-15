@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { getActiveProjects, getUpcomingMeetings } from '@/lib/api';
-import { CalendarIcon, ClockIcon, ChartBarIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 import { Spinner } from '@/components/ui/spinner';
 import { Suspense } from 'react';
 import { DBMeeting } from '@/types/database';
+import { ProjectCard } from '@/components/project/ProjectCard';
+import { MeetingCard } from '@/components/meeting/MeetingCard';
 
 async function ProjectStats() {
   const activeProjects = await getActiveProjects();
@@ -49,40 +50,7 @@ async function ProjectStats() {
           <div className="divide-y divide-gray-200">
             {activeProjects.length > 0 ? (
               activeProjects.slice(0, 5).map((project) => (
-                <Link 
-                  key={project.id} 
-                  href={`/projects/${project.id}`}
-                  className="block p-6 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="text-lg font-medium text-navy-900">
-                        {project.name}
-                      </h3>
-                      <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
-                        <span className="flex items-center">
-                          <CalendarIcon className="h-4 w-4 mr-1" />
-                          Started {new Date(project.start_date).toLocaleDateString()}
-                        </span>
-                        <span className="flex items-center">
-                          <UserGroupIcon className="h-4 w-4 mr-1" />
-                          {project.teamSize} members
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="text-sm text-gray-500">
-                        Progress: {project.progress}%
-                      </div>
-                      <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-teal-500 rounded-full transition-all duration-500"
-                          style={{ width: `${project.progress}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+                <ProjectCard key={project.id} project={project} />
               ))
             ) : (
               <div className="p-6 text-center text-gray-500">
@@ -111,33 +79,7 @@ async function ProjectStats() {
           <div className="divide-y divide-gray-200">
             {upcomingMeetings.length > 0 ? (
               upcomingMeetings.slice(0, 5).map((meeting: DBMeeting) => (
-                <Link
-                  key={meeting.meeting_id}
-                  href={`/meetings/${meeting.meeting_id}`}
-                  className="block p-6 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="text-lg font-medium text-navy-900">
-                        {meeting.meeting_name}
-                      </h3>
-                      <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
-                        <span className="flex items-center">
-                          <CalendarIcon className="h-4 w-4 mr-1" />
-                          {new Date(meeting.date_time).toLocaleDateString()}
-                        </span>
-                        <span className="flex items-center">
-                          <ClockIcon className="h-4 w-4 mr-1" />
-                          {new Date(meeting.date_time).toLocaleTimeString([], { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}
-                        </span>
-                      </div>
-                    </div>
-                    <ChartBarIcon className="h-5 w-5 text-gray-400" />
-                  </div>
-                </Link>
+                <MeetingCard key={meeting.meeting_id} meeting={meeting} />
               ))
             ) : (
               <div className="p-6 text-center text-gray-500">

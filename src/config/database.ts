@@ -1,18 +1,15 @@
-import { Pool, PoolClient } from 'pg';
-import { config } from '@/config';
+import { Pool } from 'pg';
+import { config } from './index';
 
-const pool = new Pool({
+export const pool = new Pool({
     user: config.db.user,
     password: config.db.password,
     host: config.db.host,
     port: config.db.port,
     database: config.db.database,
-    ssl: process.env.NODE_ENV === 'production' ? {
-        rejectUnauthorized: false
-    } : undefined
 });
 
-// Add event listener for errors
+// Add error handling
 pool.on('error', (err) => {
     console.error('Unexpected error on idle client', err);
     process.exit(-1);
