@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProjectStartFormData, ProjectCategory, ProjectType, ResourceEntry, Milestone } from '@/types/project';
+import { ProjectStartFormData, ProjectCategory, ProjectType } from '@/types/project';
 import { validateProjectStartForm } from '@/utils/validation';
 import { CategorySelect } from './CategorySelect';
 import { TypeMultiSelect } from './TypeMultiSelect';
@@ -8,7 +8,7 @@ import { MilestonesSection } from './MilestonesSection';
 import { DifficultySlider } from './DifficultySlider';
 
 interface ProjectStartFormProps {
-  onSubmit: (data: ProjectStartFormData) => void;
+  onSubmit: (data: ProjectStartFormData) => Promise<void>;
 }
 
 export const ProjectStartForm: React.FC<ProjectStartFormProps> = ({ onSubmit }) => {
@@ -56,13 +56,14 @@ export const ProjectStartForm: React.FC<ProjectStartFormProps> = ({ onSubmit }) 
     }
   };
 
-  const updateFormData = (field: keyof ProjectStartFormData, value: any) => {
+  const updateFormData = (field: keyof ProjectStartFormData, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
     if (errors[field]) {
       setErrors(prev => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [field]: _, ...rest } = prev;
         return rest;
       });
@@ -115,13 +116,13 @@ export const ProjectStartForm: React.FC<ProjectStartFormProps> = ({ onSubmit }) 
 
       <CategorySelect
         value={formData.category}
-        onChange={(value) => updateFormData('category', value)}
+        onChange={(value: ProjectCategory) => updateFormData('category', value)}
         error={errors.category}
       />
 
       <TypeMultiSelect
         value={formData.types}
-        onChange={(value) => updateFormData('types', value)}
+        onChange={(value: ProjectType[]) => updateFormData('types', value)}
         error={errors.types}
       />
 
@@ -209,6 +210,7 @@ export const ProjectStartForm: React.FC<ProjectStartFormProps> = ({ onSubmit }) 
           type="button"
           className="btn-secondary"
           onClick={() => window.history.back()}
+          disabled={isSubmitting}
         >
           Cancel
         </button>

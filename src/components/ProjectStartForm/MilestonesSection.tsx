@@ -32,7 +32,10 @@ export const MilestonesSection: React.FC<MilestonesSectionProps> = ({
     if (newNumber > milestones.length) {
       onChange([
         ...milestones,
-        ...Array(newNumber - milestones.length).fill({ description: '', dueDate: new Date() })
+        ...Array(newNumber - milestones.length).fill(null).map(() => ({
+          description: '',
+          dueDate: new Date()
+        }))
       ]);
     } else if (newNumber < milestones.length) {
       onChange(milestones.slice(0, newNumber));

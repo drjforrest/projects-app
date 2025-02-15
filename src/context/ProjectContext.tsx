@@ -1,6 +1,26 @@
 import React, { createContext, useContext, useReducer, useCallback } from 'react';
-import { DBProject, DBOutput, DBMeeting } from '@/types/database';
+import { DBProject, DBOutput, DBMeeting, ProjectRetrospective } from '@/types/database';
 import * as api from '@/lib/api';
+import { ProjectStartFormData } from '@/types/project';
+
+interface ProjectContextType {
+    currentProject: DBProject | null;
+    projects: DBProject[];
+    outputs: DBOutput[];
+    meetings: DBMeeting[];
+    loading: boolean;
+    error: Error | null;
+    loadProject: (id: number) => Promise<void>;
+    loadProjects: () => Promise<void>;
+    createNewProject: (data: ProjectStartFormData) => Promise<number>;
+    closeProject: (id: number, retrospective: ProjectRetrospective) => Promise<void>;
+    createOutput: (data: Omit<DBOutput, 'output_id' | 'created_at' | 'updated_at'>) => Promise<number>;
+    updateOutput: (id: number, data: Partial<DBOutput>) => Promise<void>;
+    deleteOutput: (id: number) => Promise<void>;
+    createMeeting: (data: Omit<DBMeeting, 'meeting_id' | 'created_at' | 'updated_at'>) => Promise<number>;
+    updateMeeting: (id: number, data: Partial<DBMeeting>) => Promise<void>;
+    deleteMeeting: (id: number) => Promise<void>;
+}
 
 interface ProjectState {
     currentProject: DBProject | null;
@@ -144,7 +164,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    const createNewProject = useCallback(async (data: any) => {
+    const createNewProject = useCallback(async (data: ProjectStartFormData) => {
         try {
             dispatch({ type: 'SET_LOADING', payload: true });
             const projectId = await api.createProject(data);
@@ -160,7 +180,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    const closeProject = useCallback(async (id: number, retrospective: any) => {
+    const closeProject = useCallback(async (id: number, retrospective: ProjectRetrospective) => {
         try {
             dispatch({ type: 'SET_LOADING', payload: true });
             await api.closeProject(id, retrospective);
@@ -175,7 +195,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    const createOutput = useCallback(async (data: any) => {
+    const createOutput = useCallback(async (data: Omit<DBOutput, 'output_id' | 'created_at' | 'updated_at'>) => {
         try {
             dispatch({ type: 'SET_LOADING', payload: true });
             const outputId = await api.createOutput(data);
@@ -191,7 +211,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    const updateOutput = useCallback(async (id: number, data: any) => {
+    const updateOutput = useCallback(async (id: number, data: Partial<DBOutput>) => {
         try {
             dispatch({ type: 'SET_LOADING', payload: true });
             await api.updateOutput(id, data);
@@ -220,7 +240,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    const createMeeting = useCallback(async (data: any) => {
+    const createMeeting = useCallback(async (data: Omit<DBMeeting, 'meeting_id' | 'created_at' | 'updated_at'>) => {
         try {
             dispatch({ type: 'SET_LOADING', payload: true });
             const meetingId = await api.createMeeting(data);
@@ -236,7 +256,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    const updateMeeting = useCallback(async (id: number, data: any) => {
+    const updateMeeting = useCallback(async (id: number, data: Partial<DBMeeting>) => {
         try {
             dispatch({ type: 'SET_LOADING', payload: true });
             await api.updateMeeting(id, data);

@@ -33,7 +33,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
         }`}
       >
         <option value="">Select a category</option>
-        {categories.map((category, index) => (
+        {categories.map((category) => (
           <option 
             key={category} 
             value={category}

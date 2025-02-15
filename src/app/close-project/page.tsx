@@ -1,4 +1,21 @@
+import { useProject } from '@/context/ProjectContext';
+
 export default function CloseProject() {
+  const { currentProject } = useProject();
+
+  if (!currentProject) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold">Close Project</h1>
+        <div className="bg-rust-50 p-4 rounded-md">
+          <p className="text-rust-800">
+            Please select a project before closing it.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Close Project</h1>

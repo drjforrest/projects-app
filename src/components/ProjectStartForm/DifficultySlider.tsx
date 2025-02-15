@@ -48,6 +48,7 @@ export const DifficultySlider: React.FC<DifficultySliderProps> = ({
           type="range"
           min="0"
           max="10"
+          step="1"
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value))}
           className="absolute top-0 w-full h-2 opacity-0 cursor-pointer"

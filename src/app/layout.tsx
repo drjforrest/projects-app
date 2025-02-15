@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ProjectProvider } from '@/context/ProjectContext'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,29 +24,29 @@ export default function RootLayout({
             <div className="max-w-7xl mx-auto px-4">
               <div className="flex justify-between h-16">
                 <div className="flex space-x-4">
-                  <a href="/" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
+                  <Link href="/" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
                     Home
-                  </a>
-                  <a href="/start-project" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
+                  </Link>
+                  <Link href="/start-project" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
                     Start Project
-                  </a>
-                  <a href="/projects" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
+                  </Link>
+                  <Link href="/projects" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
                     Projects Dashboard
-                  </a>
-                  <a href="/outputs" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
+                  </Link>
+                  <Link href="/outputs" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
                     Project Outputs
-                  </a>
-                  <a href="/meetings" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
+                  </Link>
+                  <Link href="/meetings" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
                     Meetings
-                  </a>
-                  <a href="/close-project" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
+                  </Link>
+                  <Link href="/close-project" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
                     Close Project
-                  </a>
+                  </Link>
                 </div>
                 <div className="flex items-center">
-                  <a href="/settings" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
+                  <Link href="/settings" className="flex items-center px-3 py-2 text-sage-300 hover:text-gold-400 transition-all duration-200 hover:-translate-y-0.5">
                     Settings
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

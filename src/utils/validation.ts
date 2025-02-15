@@ -28,33 +28,36 @@ export const validateResources = (resources: ProjectStartFormData['resources']):
   return null;
 };
 
-export const validateProjectStartForm = (data: ProjectStartFormData): Record<string, string> => {
-  const errors: Record<string, string> = {};
+export function validateProjectStartForm(data: ProjectStartFormData): Record<string, string> {
+    const errors: Record<string, string> = {};
 
-  const projectNameError = validateProjectName(data.projectName);
-  if (projectNameError) errors.projectName = projectNameError;
+    if (!data.projectName.trim()) {
+        errors.projectName = 'Project name is required';
+    }
 
-  const startDateError = validateDate(data.startDate, 'Start date');
-  if (startDateError) errors.startDate = startDateError;
+    if (!data.objective.trim()) {
+        errors.objective = 'Project objective is required';
+    }
 
-  const dueDateError = validateDate(data.dueDate, 'Due date');
-  if (dueDateError) errors.dueDate = dueDateError;
+    if (!data.mainDeliverable.trim()) {
+        errors.mainDeliverable = 'Main deliverable is required';
+    }
 
-  if (!data.category) errors.category = 'Category is required';
-  if (!data.types.length) errors.types = 'At least one project type must be selected';
-  if (!data.objective.trim()) errors.objective = 'Objective is required';
-  if (!data.mainDeliverable.trim()) errors.mainDeliverable = 'Main deliverable is required';
-  if (!data.toWhom.trim()) errors.toWhom = 'To whom field is required';
+    if (!data.toWhom.trim()) {
+        errors.toWhom = 'Recipient information is required';
+    }
 
-  const milestonesError = validateMilestones(data.milestones);
-  if (milestonesError) errors.milestones = milestonesError;
+    if (data.types.length === 0) {
+        errors.types = 'At least one project type must be selected';
+    }
 
-  const resourcesError = validateResources(data.resources);
-  if (resourcesError) errors.resources = resourcesError;
+    if (data.startDate > data.dueDate) {
+        errors.dueDate = 'Due date must be after start date';
+    }
 
-  if (data.anticipatedDifficulty < 0 || data.anticipatedDifficulty > 10) {
-    errors.anticipatedDifficulty = 'Difficulty must be between 0 and 10';
-  }
+    if (data.numberOfMilestones > 0 && data.milestones.length === 0) {
+        errors.milestones = 'Please add milestone details';
+    }
 
-  return errors;
-};
+    return errors;
+}

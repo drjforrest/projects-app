@@ -122,6 +122,16 @@ export async function deleteOutput(id: number) {
     return response.json();
 }
 
+export async function getOutput(id: number) {
+    const response = await fetch(`/api/outputs/${id}`);
+    
+    if (!response.ok) {
+        throw new Error('Failed to fetch output');
+    }
+    
+    return response.json();
+}
+
 // Meeting API calls
 export async function createMeeting(data: Omit<DBMeeting, 'meeting_id' | 'created_at' | 'updated_at'>) {
     const response = await fetch('/api/meetings', {
@@ -227,6 +237,16 @@ export async function deleteMeeting(id: number) {
     
     if (!response.ok) {
         throw new Error('Failed to delete meeting');
+    }
+    
+    return response.json();
+}
+
+export async function getMeeting(id: number) {
+    const response = await fetch(`/api/meetings/${id}`);
+    
+    if (!response.ok) {
+        throw new Error('Failed to fetch meeting');
     }
     
     return response.json();
