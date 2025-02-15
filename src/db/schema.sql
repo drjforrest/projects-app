@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS projects (
     additional_notes TEXT,
     status project_status NOT NULL DEFAULT 'active',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    retrospective JSONB
 );
 
 -- Create the outputs table
@@ -59,11 +60,29 @@ CREATE TABLE IF NOT EXISTS meetings (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create feedback tables
+CREATE TABLE IF NOT EXISTS output_feedback (
+    feedback_id SERIAL PRIMARY KEY,
+    output_id INTEGER REFERENCES outputs(output_id) ON DELETE CASCADE,
+    reviewer VARCHAR(255) NOT NULL,
+    rating INTEGER CHECK (rating BETWEEN 1 AND 5),
+    comments TEXT,
+    quality_rating INTEGER CHECK (quality_rating BETWEEN 1 AND 5),
+    completeness_rating INTEGER CHECK (completeness_rating BETWEEN 1 AND 5),
+    clarity_rating INTEGER CHECK (clarity_rating BETWEEN 1 AND 5),
+    action_items TEXT[] DEFAULT ARRAY[]::TEXT[],
+    follow_up_date DATE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status);
 CREATE INDEX IF NOT EXISTS idx_outputs_project_id ON outputs(project_id);
 CREATE INDEX IF NOT EXISTS idx_meetings_project_id ON meetings(project_id);
 CREATE INDEX IF NOT EXISTS idx_meetings_date_time ON meetings(date_time);
+CREATE INDEX IF NOT EXISTS idx_output_feedback_output_id ON output_feedback(output_id);
+CREATE INDEX IF NOT EXISTS idx_output_feedback_rating ON output_feedback(rating);
 
 -- Create updated_at trigger
 CREATE OR REPLACE FUNCTION update_updated_at_column()

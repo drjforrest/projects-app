@@ -20,7 +20,7 @@ pool.on('error', (err) => {
 
 export default pool;
 
-export const query = async (text: string, params?: (string | number | Date | boolean | null)[]) => {
+export const query = async (text: string, params?: (string | number | boolean | Date | null | string[])[]): Promise<QueryResult> => {
     const client = await pool.connect();
     try {
         const start = Date.now();
