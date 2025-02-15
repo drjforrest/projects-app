@@ -3,19 +3,142 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --primary-dark: 1, 2, 33;      /* Navy */
+  --primary-accent: 10, 115, 115; /* Teal */
+  --secondary: 183, 191, 153;     /* Sage */
+  --highlight: 237, 170, 37;      /* Gold */
+  --warning: 196, 51, 2;          /* Rust */
+  --background: 245, 245, 245;    /* Light gray */
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--primary-dark));
+  background: rgb(var(--background));
+}
+
+/* Modern Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(var(--secondary), 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--primary-accent), 0.6);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--primary-accent), 0.8);
+}
+
+/* Form Element Styles */
+input[type="range"]::-webkit-slider-thumb {
+  @apply w-4 h-4 appearance-none bg-teal-600 rounded-full cursor-pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  @apply w-4 h-4 border-0 bg-teal-600 rounded-full cursor-pointer;
+}
+
+/* Custom classes */
+.btn-primary {
+  @apply bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply bg-sage-500 text-navy-900 px-4 py-2 rounded-md hover:bg-sage-600 transition-colors duration-200;
+}
+
+.btn-highlight {
+  @apply bg-gold-500 text-navy-900 px-4 py-2 rounded-md hover:bg-gold-600 transition-colors duration-200;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden border border-sage-200;
+}
+
+.input-field {
+  @apply mt-1 block w-full rounded-md border-sage-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-navy-700;
+}
+
+/* Focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2;
+}
+
+/* Animation utilities */
+.page-transition {
+  @apply animate-fade-in;
+}
+
+.card-transition {
+  @apply animate-scale-in;
+}
+
+.list-item-transition {
+  @apply animate-slide-in;
+}
+
+.highlight-transition {
+  @apply animate-bounce-in;
+}
+
+/* Interactive elements */
+.interactive-hover {
+  @apply transform transition-all duration-200 hover:scale-105;
+}
+
+.interactive-press {
+  @apply transform transition-all duration-100 active:scale-95;
+}
+
+/* Link styles */
+.link {
+  @apply text-teal-600 hover:text-teal-800 transition-all duration-200 hover:-translate-y-0.5;
+}
+
+/* Loading states */
+.loading-spin {
+  @apply animate-spin-slow;
+}
+
+/* Hover card effect */
+.hover-card {
+  @apply transform transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+}
+
+/* Button animations */
+.btn-primary {
+  @apply bg-teal-600 text-white px-4 py-2 rounded-md transition-all duration-200
+         hover:bg-teal-700 hover:shadow-md hover:-translate-y-0.5
+         active:translate-y-0 active:shadow-none;
+}
+
+.btn-secondary {
+  @apply bg-sage-500 text-navy-900 px-4 py-2 rounded-md transition-all duration-200
+         hover:bg-sage-600 hover:shadow-md hover:-translate-y-0.5
+         active:translate-y-0 active:shadow-none;
+}
+
+.btn-highlight {
+  @apply bg-gold-500 text-navy-900 px-4 py-2 rounded-md transition-all duration-200
+         hover:bg-gold-600 hover:shadow-md hover:-translate-y-0.5
+         active:translate-y-0 active:shadow-none;
+}
+
+/* Navigation styles */
+.nav-link {
+  @apply text-navy-600 hover:text-teal-600 transition-colors duration-200;
+}
+
+.nav-link-active {
+  @apply text-teal-600 font-medium;
 }
