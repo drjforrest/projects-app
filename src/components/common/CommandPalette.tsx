@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Dialog } from '@headlessui/react';
-import { CommandIcon, SearchIcon } from '@heroicons/react/24/outline';
+import { CommandLineIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const CommandPalette = () => {
@@ -39,7 +39,7 @@ export const CommandPalette = () => {
                 className="p-2 text-sage-300 hover:text-gold-400"
                 title="Command Palette (⌘K)"
             >
-                <CommandIcon className="h-6 w-6" />
+                <CommandLineIcon className="h-6 w-6" />
             </button>
 
             <AnimatePresence>
@@ -54,15 +54,15 @@ export const CommandPalette = () => {
                         onClose={() => setIsOpen(false)}
                         className="fixed inset-0 z-50 overflow-y-auto p-4 pt-[25vh]"
                     >
-                        <Dialog.Overlay className="fixed inset-0 bg-navy-900 bg-opacity-50" />
+                        <div className="fixed inset-0 bg-navy-900 bg-opacity-50" />
 
                         <div className="relative mx-auto max-w-xl rounded-xl bg-white shadow-2xl">
                             <div className="flex items-center px-4 border-b">
-                                <SearchIcon className="h-5 w-5 text-gray-400" />
+                                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
                                 <input
                                     type="text"
                                     value={query}
-                                    onChange={(e) => setQuery(e.target.value)}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
                                     className="w-full px-4 py-4 text-sm text-gray-900 placeholder-gray-400 focus:outline-none"
                                     placeholder="Search commands..."
                                     autoFocus

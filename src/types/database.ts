@@ -1,7 +1,11 @@
 export interface DBProject {
-    project_id: number;
-    project_name: string;
+    id: number;
+    name: string;
     start_date: Date;
+    progress: number;
+    totalHours: number;
+    teamSize: number;
+    status: 'active' | 'completed' | 'cancelled' | 'on_hold';
     category: string;
     project_types: string[];
     background_context?: string;
@@ -21,7 +25,6 @@ export interface DBProject {
     }[];
     anticipated_difficulty: number;
     additional_notes?: string;
-    status: 'active' | 'completed' | 'cancelled' | 'on_hold';
     created_at: Date;
     updated_at: Date;
 }

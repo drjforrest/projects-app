@@ -1,3 +1,5 @@
+import { ProjectCategory } from "./project";
+
 export interface ProjectSettings {
     defaultCategory: ProjectCategory;
     defaultMilestoneInterval: number; // days

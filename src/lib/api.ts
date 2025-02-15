@@ -1,5 +1,6 @@
 import { ProjectStartFormData } from '@/types/project';
-import { DBOutput, DBMeeting, ProjectRetrospective } from '@/types/database';
+import { DBOutput, DBMeeting, ProjectRetrospective, DBProject } from '@/types/database';
+import { pool } from '@/config/database';
 
 // Project API calls
 export async function createProject(data: ProjectStartFormData) {
@@ -250,4 +251,20 @@ export async function getMeeting(id: number) {
     }
     
     return response.json();
+}
+
+export async function getActiveProjects(): Promise<DBProject[]> {
+    const result = await pool.query<DBProject>(
+        `SELECT 
+            id,
+            name,
+            start_date as "startDate",
+            progress,
+            total_hours as "totalHours"
+        FROM projects 
+        WHERE status = 'active' 
+        ORDER BY start_date DESC`
+    );
+    
+    return result.rows;
 }

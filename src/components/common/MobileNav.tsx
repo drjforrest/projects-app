@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MenuIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { NavLink } from './NavLink';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -12,7 +12,7 @@ export const MobileNav = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-2 text-sage-300 hover:text-gold-400"
             >
-                <MenuIcon className="h-6 w-6" />
+                <Bars3Icon className="h-6 w-6" />
             </button>
             
             <AnimatePresence>
