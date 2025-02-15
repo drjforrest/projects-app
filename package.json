@@ -8,7 +8,9 @@
     "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap",
+    "db:init": "ts-node -r tsconfig-paths/register src/db/init/index.ts",
+    "db:seed": "NODE_ENV=development ts-node -r tsconfig-paths/register src/db/init/index.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
