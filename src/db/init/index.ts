@@ -1,4 +1,4 @@
-import { pool } from '@/config/database';
+import { pool } from 'src/config/database';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 

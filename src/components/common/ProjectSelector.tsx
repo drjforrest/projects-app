@@ -3,61 +3,32 @@ import { useProject } from '@/context/ProjectContext';
 import { DBProject } from '@/types/database';
 
 interface ProjectSelectorProps {
-    onSelect: (project: DBProject) => void;
+    projects: DBProject[];
     selectedId?: number;
-    className?: string;
+    onSelect: (project: DBProject) => void;
 }
 
-export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
-    onSelect,
-    selectedId,
-    className = ''
-}) => {
-    const { projects, loadProjects, loading } = useProject();
-
-    useEffect(() => {
-        loadProjects();
-    }, [loadProjects]);
-
-    if (loading) {
-        return (
-            <div className="animate-pulse">
-                <div className="h-10 bg-sage-200 rounded"></div>
-            </div>
-        );
-    }
-
-    if (!projects.length) {
-        return (
-            <div className="bg-rust-50 p-4 rounded-md">
-                <p className="text-rust-800">
-                    No active projects found. Please create a project first.
-                </p>
-            </div>
-        );
-    }
-
+export const ProjectSelector = ({ projects, selectedId, onSelect }: ProjectSelectorProps) => {
     return (
-        <div className="space-y-2">
-            <label className="form-label">Select Project</label>
+        <div className="w-full">
             <select
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                 value={selectedId || ''}
                 onChange={(e) => {
-                    const project = projects.find(p => p.project_id === parseInt(e.target.value));
+                    const project = projects.find(p => p.id === parseInt(e.target.value));
                     if (project) {
                         onSelect(project);
                     }
                 }}
-                className={`input-field hover:border-teal-400 ${className}`}
             >
-                <option value="">Select a project</option>
+                <option value="">Select a project...</option>
                 {projects.map((project) => (
                     <option 
-                        key={project.project_id} 
-                        value={project.project_id}
+                        key={project.id} 
+                        value={project.id}
                         disabled={project.status !== 'active'}
                     >
-                        {project.project_name} 
+                        {project.name} 
                         {project.status !== 'active' ? ` (${project.status})` : ''}
                     </option>
                 ))}

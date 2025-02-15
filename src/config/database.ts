@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool, PoolClient, QueryResult } from 'pg';
 import { config } from './index';
 
 export const pool = new Pool({
@@ -14,8 +14,6 @@ pool.on('error', (err) => {
     console.error('Unexpected error on idle client', err);
     process.exit(-1);
 });
-
-export default pool;
 
 export const query = async (text: string, params?: (string | number | boolean | Date | null | string[])[]): Promise<QueryResult> => {
     const client = await pool.connect();
@@ -43,4 +41,6 @@ export const transaction = async <T>(callback: (client: PoolClient) => Promise<T
     } finally {
         client.release();
     }
-}; 
+};
+
+export default pool; 

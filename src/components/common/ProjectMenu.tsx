@@ -28,7 +28,7 @@ export const ProjectMenu = () => {
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-xl font-semibold group">
-                        {currentProject.project_name}
+                        {currentProject.name}
                         <ChevronRightIcon className="h-4 w-4 inline-block ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </h2>
                     <ProjectStatusBadge status={currentProject.status} />
@@ -36,7 +36,7 @@ export const ProjectMenu = () => {
                 <div className="flex space-x-4">
                     <motion.div whileHover={{ y: -2 }}>
                         <Link 
-                            href={`/projects/${currentProject.project_id}/outputs`}
+                            href={`/projects/${currentProject.id}/outputs`}
                             className="btn-secondary"
                         >
                             Outputs
@@ -44,7 +44,7 @@ export const ProjectMenu = () => {
                     </motion.div>
                     <motion.div whileHover={{ y: -2 }}>
                         <Link 
-                            href={`/projects/${currentProject.project_id}/meetings`}
+                            href={`/projects/${currentProject.id}/meetings`}
                             className="btn-secondary"
                         >
                             Meetings

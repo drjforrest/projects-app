@@ -9,8 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "postbuild": "next-sitemap",
-    "db:init": "ts-node -r tsconfig-paths/register src/db/init/index.ts",
-    "db:seed": "NODE_ENV=development ts-node -r tsconfig-paths/register src/db/init/index.ts"
+    "db:init": "ts-node -r tsconfig-paths/register -P tsconfig.scripts.json src/db/init/index.ts",
+    "db:seed": "NODE_ENV=development NODE_PATH=./ ts-node -r tsconfig-paths/register src/db/init/index.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -45,6 +45,8 @@
     "jest": "^29.7.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5"
   }
 }
