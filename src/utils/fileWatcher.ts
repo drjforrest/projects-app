@@ -58,7 +58,7 @@ export const useFileWatcher = ({
                 clearTimeout(timeoutId);
             }
         };
-    }, [path, interval, onUpdate, onError]);
+    }, [path, interval, onUpdate, onError, lastModified]);
 
     return {
         content,

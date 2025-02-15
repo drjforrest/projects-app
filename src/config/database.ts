@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool, PoolClient } from 'pg';
 import { config } from '@/config';
 
 const pool = new Pool({
@@ -20,7 +20,7 @@ pool.on('error', (err) => {
 
 export default pool;
 
-export const query = async (text: string, params?: any[]) => {
+export const query = async (text: string, params?: (string | number | Date | boolean | null)[]) => {
     const client = await pool.connect();
     try {
         const start = Date.now();
@@ -33,7 +33,7 @@ export const query = async (text: string, params?: any[]) => {
     }
 };
 
-export const transaction = async <T>(callback: (client: any) => Promise<T>) => {
+export const transaction = async <T>(callback: (client: PoolClient) => Promise<T>) => {
     const client = await pool.connect();
     try {
         await client.query('BEGIN');

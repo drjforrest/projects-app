@@ -67,7 +67,7 @@ export async function getMeeting(meetingId: number): Promise<DBMeeting> {
 
 export async function updateMeeting(meetingId: number, updateData: Partial<DBMeeting>) {
     const updateFields: string[] = [];
-    const values: any[] = [];
+    const values: (string | number | Date | string[] | null)[] = [];
     let valueCounter = 1;
 
     Object.entries(updateData).forEach(([key, value]) => {

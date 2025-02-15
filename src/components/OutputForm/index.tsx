@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+                                   import React, { useState } from 'react';
 import { useProject } from '@/context/ProjectContext';
 import { DBOutput } from '@/types/database';
 
@@ -56,7 +56,17 @@ export const OutputForm: React.FC<OutputFormProps> = ({
                 await updateOutput(initialData.output_id, formData);
                 outputId = initialData.output_id;
             } else {
-                outputId = await createOutput(formData);
+                const formDataWithProject = {
+                    project_id: projectId,
+                    output_name: formData.output_name || '',
+                    description: formData.description || '',
+                    version_number: formData.version_number,
+                    tags: formData.tags || [],
+                    next_action: formData.next_action,
+                    feedback_to: formData.feedback_to,
+                    time_allocated: formData.time_allocated || 0
+                };
+                outputId = await createOutput(formDataWithProject);
             }
             onSubmit?.(outputId);
         } catch (error) {

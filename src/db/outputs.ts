@@ -64,7 +64,7 @@ export async function getOutput(outputId: number): Promise<DBOutput> {
 
 export async function updateOutput(outputId: number, updateData: Partial<DBOutput>) {
     const updateFields: string[] = [];
-    const values: any[] = [];
+    const values: (string | number | Date | string[] | null)[] = [];
     let valueCounter = 1;
 
     Object.entries(updateData).forEach(([key, value]) => {
