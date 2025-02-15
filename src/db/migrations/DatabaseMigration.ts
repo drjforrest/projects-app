@@ -3,17 +3,19 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as crypto from 'crypto';
 import { logger } from '@/utils/logger';
-import { MigrationError, DatabaseError } from '@/utils/errors';
+import { MigrationError } from '@/utils/errors';
 import { Migration, MigrationStatus, MigrationOptions } from './types';
 import { MigrationLock } from './MigrationLock';
 
 export class DatabaseMigration {
     private pool: Pool;
     private migrationsPath: string;
+    private options: MigrationOptions;
 
-    constructor(pool: Pool) {
+    constructor(pool: Pool, options: MigrationOptions = {}) {
         this.pool = pool;
         this.migrationsPath = path.join(__dirname, 'scripts');
+        this.options = options;
     }
 
     async getStatus(): Promise<MigrationStatus> {
@@ -110,10 +112,10 @@ export class DatabaseMigration {
                 });
             } catch (error) {
                 throw new MigrationError(
-                    `Failed to apply migration: ${error.message}`,
+                    `Failed to apply migration: ${error instanceof Error ? error.message : 'Unknown error'}`,
                     migration.version,
                     migration.filename,
-                    error
+                    error instanceof Error ? error : undefined
                 );
             }
         }
@@ -274,11 +276,25 @@ export class DatabaseMigration {
             logger.info(`Rolled back migration ${migration.version}`);
         } catch (error) {
             throw new MigrationError(
-                `Failed to rollback migration: ${error.message}`,
+                `Failed to rollback migration: ${error instanceof Error ? error.message : 'Unknown error'}`,
                 migration.version,
                 migration.filename,
-                error
+                error instanceof Error ? error : undefined
             );
         }
+    }
+
+    private compareVersions(a: string, b: string): number {
+        const aParts = a.split('.').map(Number);
+        const bParts = b.split('.').map(Number);
+        
+        for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+            const aPart = aParts[i] || 0;
+            const bPart = bParts[i] || 0;
+            if (aPart !== bPart) {
+                return aPart - bPart;
+            }
+        }
+        return 0;
     }
 } 

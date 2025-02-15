@@ -34,7 +34,8 @@ export class MigrationLock {
                 [MigrationLock.LOCK_ID]
             );
 
-            return result.rowCount > 0;
+            // Ensure result is not null before accessing rowCount
+            return result && result.rowCount != null && result.rowCount > 0;
         } catch (error) {
             logger.error('Error acquiring migration lock', { error });
             throw new DatabaseError(
@@ -59,4 +60,4 @@ export class MigrationLock {
             logger.error('Error releasing migration lock', { error });
         }
     }
-} 
+}
