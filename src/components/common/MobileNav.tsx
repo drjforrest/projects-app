@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { NavLink } from './NavLink';
 import { AnimatePresence, motion } from 'framer-motion';
+import type { Route } from 'next';
 
 export const MobileNav = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -42,12 +43,12 @@ export const MobileNav = () => {
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.2 }}
                             >
-                                <NavLink href="/" mobile>Home</NavLink>
-                                <NavLink href="/projects" mobile>Projects</NavLink>
-                                <NavLink href="/start-project" mobile>Start Project</NavLink>
-                                <NavLink href="/outputs" mobile>Outputs</NavLink>
-                                <NavLink href="/meetings" mobile>Meetings</NavLink>
-                                <NavLink href="/settings" mobile>Settings</NavLink>
+                                <NavLink href={'/' as Route} mobile>Home</NavLink>
+                                <NavLink href={'/projects' as Route} mobile>Projects</NavLink>
+                                <NavLink href={'/start-project' as Route} mobile>Start Project</NavLink>
+                                <NavLink href={'/outputs' as Route} mobile>Outputs</NavLink>
+                                <NavLink href={'/meetings' as Route} mobile>Meetings</NavLink>
+                                <NavLink href={'/settings' as Route} mobile>Settings</NavLink>
                             </motion.div>
                         </div>
                     </motion.div>

@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
 import * as meetingsDb from '@/db/meetings';
-import { query } from '@/config/database';
+import { query, QueryParam } from '@/config/database';
 import { DBMeeting } from '@/types/database';
-
-type QueryParam = string | number | Date | string[] | number[] | null;
 
 export async function GET(
     request: Request,
@@ -54,7 +52,7 @@ export async function PUT(
             `UPDATE meetings 
             SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP 
             WHERE meeting_id = $${valueCounter}`,
-            values as (string | number | boolean | string[] | Date | null)[]
+            values
         );
 
         const result = await query(

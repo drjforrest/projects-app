@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { CalendarIcon, UserGroupIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { ProgressRing } from '@/components/ui/ProgressRing';
 import Link from 'next/link';
+import type { Route } from 'next';
 import { DBProject } from '@/types/database';
 
 export function ProjectCard({ project }: { project: DBProject }) {
@@ -11,7 +12,7 @@ export function ProjectCard({ project }: { project: DBProject }) {
             className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
         >
             <Link 
-                href={`/projects/${project.id}`}
+                href={`/projects/${project.id}` as Route}
                 className="block p-6"
             >
                 <div className="flex justify-between items-start">

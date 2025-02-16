@@ -9,6 +9,8 @@ import { Alert } from '@/components/ui/alert';
 import { Spinner } from '@/components/ui/spinner';
 import type { Route } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 interface FormData {
     completionStatus: 'completed' | 'partially_completed' | 'cancelled' | 'on_hold';
     completionDate: string;

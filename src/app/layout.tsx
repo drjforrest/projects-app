@@ -1,13 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ProjectProvider } from '@/context/ProjectContext'
-import { SettingsProvider } from '@/context/SettingsContext'
-import { DesktopNav } from '@/components/common/DesktopNav'
-import { MobileNav } from '@/components/common/MobileNav'
-import { Breadcrumb } from '@/components/common/Breadcrumb'
-import { ProjectMenu } from '@/components/common/ProjectMenu'
-import { QuickActions } from '@/components/common/QuickActions'
+import { Providers } from '@/components/Providers'
+import { Navigation } from '@/components/common/Navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,22 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SettingsProvider>
-          <ProjectProvider>
-            <div className="min-h-screen bg-gray-50">
-              <nav className="bg-navy-900 shadow-lg">
-                <DesktopNav />
-                <MobileNav />
-              </nav>
-              <main className="max-w-7xl mx-auto px-4 py-6">
-                <Breadcrumb />
-                <ProjectMenu />
-                {children}
-              </main>
-              <QuickActions />
-            </div>
-          </ProjectProvider>
-        </SettingsProvider>
+        <Providers>
+          <div className="min-h-screen bg-gray-50">
+            <Navigation />
+            <main className="max-w-7xl mx-auto px-4 py-6">
+              {children}
+            </main>
+          </div>
+        </Providers>
       </body>
     </html>
   )

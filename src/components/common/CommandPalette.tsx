@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Dialog } from '@headlessui/react';
 import { CommandLineIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { Route } from 'next';
 
 export const CommandPalette = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,10 +13,10 @@ export const CommandPalette = () => {
     const router = useRouter();
 
     const commands = [
-        { id: 'new-project', name: 'New Project', shortcut: '⌘N', href: '/start-project' },
-        { id: 'new-meeting', name: 'Schedule Meeting', shortcut: '⌘M', href: '/meetings/new' },
-        { id: 'projects', name: 'View Projects', shortcut: '⌘P', href: '/projects' },
-        { id: 'settings', name: 'Settings', shortcut: '⌘,', href: '/settings' },
+        { id: 'new-project', name: 'New Project', shortcut: '⌘N', href: '/start-project' as Route },
+        { id: 'new-meeting', name: 'Schedule Meeting', shortcut: '⌘M', href: '/meetings/new' as Route },
+        { id: 'projects', name: 'View Projects', shortcut: '⌘P', href: '/projects' as Route },
+        { id: 'settings', name: 'Settings', shortcut: '⌘,', href: '/settings' as Route },
     ];
 
     const filteredCommands = commands.filter(command =>

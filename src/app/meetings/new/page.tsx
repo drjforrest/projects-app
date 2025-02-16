@@ -1,3 +1,5 @@
+'use client';
+
 import { MeetingForm } from '@/components/MeetingForm';
 import { useProject } from '@/context/ProjectContext';
 

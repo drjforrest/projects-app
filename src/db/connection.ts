@@ -26,9 +26,8 @@ export class DatabaseConnection {
         const client = await this.getInstance().connect();
         const release = client.release;
         
-        // Override release to track leaks
+        // Override release method
         client.release = () => {
-            client.lastQuery = null;
             return release.apply(client);
         };
         return client;

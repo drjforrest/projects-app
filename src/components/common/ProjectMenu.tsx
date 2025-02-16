@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ProjectStatusBadge } from './ProjectStatusBadge';
 import { motion } from 'framer-motion';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import type { Route } from 'next';
 
 export const ProjectMenu = () => {
     const { currentProject, loading } = useProject();
@@ -36,7 +37,7 @@ export const ProjectMenu = () => {
                 <div className="flex space-x-4">
                     <motion.div whileHover={{ y: -2 }}>
                         <Link 
-                            href={`/projects/${currentProject.id}/outputs`}
+                            href={`/projects/${currentProject.id}/outputs` as Route}
                             className="btn-secondary"
                         >
                             Outputs
@@ -44,7 +45,7 @@ export const ProjectMenu = () => {
                     </motion.div>
                     <motion.div whileHover={{ y: -2 }}>
                         <Link 
-                            href={`/projects/${currentProject.id}/meetings`}
+                            href={`/projects/${currentProject.id}/meetings` as Route}
                             className="btn-secondary"
                         >
                             Meetings
@@ -52,7 +53,7 @@ export const ProjectMenu = () => {
                     </motion.div>
                     <motion.div whileHover={{ y: -2 }}>
                         <Link 
-                            href={`/projects/${currentProject.project_id}/close`}
+                            href={`/projects/${currentProject.id}/close` as Route}
                             className="btn-primary"
                         >
                             Close Project

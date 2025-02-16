@@ -28,12 +28,12 @@ export async function createOutput(outputData: Omit<DBOutput, 'output_id' | 'cre
         [
             project_id,
             output_name,
-            description,
-            version_number,
-            tags,
-            next_action,
-            feedback_to,
-            time_allocated
+            description ?? null,
+            version_number ?? null,
+            tags ?? null,
+            next_action ?? null,
+            feedback_to ?? null,
+            time_allocated ?? null
         ]
     );
 

@@ -1,7 +1,9 @@
-import { Pool } from 'pg';
+import { DatabaseConnection } from './connection';
 import { config } from '@/config';
+import { QueryParam } from '@/config/database';
 
-const pool = new Pool({
+// Initialize the database connection
+DatabaseConnection.initialize({
     user: config.db.user,
     password: config.db.password,
     host: config.db.host,
@@ -11,34 +13,31 @@ const pool = new Pool({
 
 export const query = async (
     text: string, 
-    params?: (string | number | boolean | Date | null | string[])[]
+    params?: QueryParam[]
 ) => {
     const start = Date.now();
+    const client = await DatabaseConnection.getInstance().connect();
     try {
-        const res = await pool.query(text, params);
+        const res = await client.query(text, params);
         const duration = Date.now() - start;
         console.log('Executed query', { text, duration, rows: res.rowCount });
         return res;
-    } catch (error) {
-        console.error('Database query error:', error);
-        throw error;
+    } finally {
+        client.release();
     }
 };
 
-export const getClient = () => pool.connect();
+export const getClient = () => DatabaseConnection.getInstance().connect();
 
 export const executeQuery = async (
     query: string, 
-    params: (string | number | boolean | Date | null)[] = []
+    params: QueryParam[] = []
 ) => {
-    const start = Date.now();
+    const client = await DatabaseConnection.getInstance().connect();
     try {
-        const res = await pool.query(query, params);
-        const duration = Date.now() - start;
-        console.log('Executed query', { query, duration, rows: res.rowCount });
-        return res;
-    } catch (error) {
-        console.error('Database query error:', error);
-        throw error;
+        const res = await client.query(query, params);
+        return res.rows;
+    } finally {
+        client.release();
     }
 };

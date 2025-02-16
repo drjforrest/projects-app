@@ -8,96 +8,109 @@ import { ProjectCard } from '@/components/project/ProjectCard';
 import { MeetingCard } from '@/components/meeting/MeetingCard';
 import type { Route } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 async function ProjectStats() {
-  const activeProjects = await getActiveProjects();
-  const upcomingMeetings = await getUpcomingMeetings();
+  try {
+    const activeProjects = await getActiveProjects();
+    const upcomingMeetings = await getUpcomingMeetings();
 
-  return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-navy-900 mb-2">Active Projects</h3>
-          <p className="text-3xl font-bold text-teal-600">{activeProjects.length}</p>
+    return (
+      <>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-navy-900 mb-2">Active Projects</h3>
+            <p className="text-3xl font-bold text-teal-600">{activeProjects.length}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-navy-900 mb-2">Total Hours</h3>
+            <p className="text-3xl font-bold text-sage-600">
+              {activeProjects.reduce((acc, p) => acc + (p.totalHours || 0), 0)}
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-navy-900 mb-2">Completion Rate</h3>
+            <p className="text-3xl font-bold text-gold-600">
+              {activeProjects.length ? Math.round((activeProjects.filter(p => p.progress >= 100).length / activeProjects.length) * 100) : 0}%
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-navy-900 mb-2">Upcoming Meetings</h3>
+            <p className="text-3xl font-bold text-rust-600">{upcomingMeetings.length}</p>
+          </div>
         </div>
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-navy-900 mb-2">Total Hours</h3>
-          <p className="text-3xl font-bold text-sage-600">
-            {activeProjects.reduce((acc, p) => acc + (p.totalHours || 0), 0)}
-          </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow-md">
+            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-navy-900">Active Projects</h2>
+              <Link 
+                href="/projects" 
+                className="text-sm text-teal-600 hover:text-teal-700"
+              >
+                View All →
+              </Link>
+            </div>
+            <div className="divide-y divide-gray-200">
+              {activeProjects.length > 0 ? (
+                activeProjects.slice(0, 5).map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))
+              ) : (
+                <div className="p-6 text-center text-gray-500">
+                  <p>No active projects.</p>
+                  <Link 
+                    href="/start-project"
+                    className="mt-2 inline-block text-teal-600 hover:text-teal-700"
+                  >
+                    Start your first project →
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md">
+            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-navy-900">Upcoming Meetings</h2>
+              <Link 
+                href={'/meetings' as Route}
+                className="text-sm text-teal-600 hover:text-teal-700"
+              >
+                View All →
+              </Link>
+            </div>
+            <div className="divide-y divide-gray-200">
+              {upcomingMeetings.length > 0 ? (
+                upcomingMeetings.slice(0, 5).map((meeting: DBMeeting) => (
+                  <MeetingCard key={meeting.meeting_id} meeting={meeting} />
+                ))
+              ) : (
+                <div className="p-6 text-center text-gray-500">
+                  <p>No upcoming meetings.</p>
+                  <Link 
+                    href="/meetings/new"
+                    className="mt-2 inline-block text-teal-600 hover:text-teal-700"
+                  >
+                    Schedule a meeting →
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-navy-900 mb-2">Completion Rate</h3>
-          <p className="text-3xl font-bold text-gold-600">
-            {activeProjects.length ? Math.round((activeProjects.filter(p => p.progress >= 100).length / activeProjects.length) * 100) : 0}%
-          </p>
-        </div>
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-navy-900 mb-2">Upcoming Meetings</h3>
-          <p className="text-3xl font-bold text-rust-600">{upcomingMeetings.length}</p>
-        </div>
+      </>
+    );
+  } catch (error) {
+    console.error('Error loading project stats:', error);
+    return (
+      <div className="bg-rust-50 p-4 rounded-md">
+        <p className="text-rust-800">
+          Unable to load project statistics. Please ensure the database is properly configured.
+        </p>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-md">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-navy-900">Active Projects</h2>
-            <Link 
-              href="/projects" 
-              className="text-sm text-teal-600 hover:text-teal-700"
-            >
-              View All →
-            </Link>
-          </div>
-          <div className="divide-y divide-gray-200">
-            {activeProjects.length > 0 ? (
-              activeProjects.slice(0, 5).map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))
-            ) : (
-              <div className="p-6 text-center text-gray-500">
-                <p>No active projects.</p>
-                <Link 
-                  href="/start-project"
-                  className="mt-2 inline-block text-teal-600 hover:text-teal-700"
-                >
-                  Start your first project →
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-navy-900">Upcoming Meetings</h2>
-            <Link 
-              href={'/meetings' as Route}
-              className="text-sm text-teal-600 hover:text-teal-700"
-            >
-              View All →
-            </Link>
-          </div>
-          <div className="divide-y divide-gray-200">
-            {upcomingMeetings.length > 0 ? (
-              upcomingMeetings.slice(0, 5).map((meeting: DBMeeting) => (
-                <MeetingCard key={meeting.meeting_id} meeting={meeting} />
-              ))
-            ) : (
-              <div className="p-6 text-center text-gray-500">
-                <p>No upcoming meetings.</p>
-                <Link 
-                  href="/meetings/new"
-                  className="mt-2 inline-block text-teal-600 hover:text-teal-700"
-                >
-                  Schedule a meeting →
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </>
-  );
+    );
+  }
 }
 
 export default function Home() {

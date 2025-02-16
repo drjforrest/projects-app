@@ -1,4 +1,4 @@
-import { pool } from '@/config/database';
+import { DatabaseConnection } from '../connection';
 
 export async function seedDatabase() {
     try {
@@ -36,7 +36,7 @@ export async function seedDatabase() {
         ];
 
         for (const project of projects) {
-            const result = await pool.query(`
+            const result = await DatabaseConnection.getInstance().query(`
                 INSERT INTO projects (
                     name, category, objective, main_deliverable, to_whom, due_date,
                     progress, team_size, project_types, milestones
@@ -53,7 +53,7 @@ export async function seedDatabase() {
             const projectId = result.rows[0].id;
 
             // Add meetings for each project
-            await pool.query(`
+            await DatabaseConnection.getInstance().query(`
                 INSERT INTO meetings (
                     project_id, meeting_name, date_time, attendees, description
                 ) VALUES ($1, $2, CURRENT_TIMESTAMP + INTERVAL '1 day', $3, $4)
@@ -65,7 +65,7 @@ export async function seedDatabase() {
             ]);
 
             // Add some activities
-            await pool.query(`
+            await DatabaseConnection.getInstance().query(`
                 INSERT INTO project_activities (
                     project_id, activity_type, description, hours_spent, performed_by
                 ) VALUES ($1, $2, $3, $4, $5)

@@ -1,4 +1,4 @@
-import { pool } from 'src/config/database';
+import { DatabaseConnection } from '../connection';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -9,7 +9,7 @@ async function initDatabase() {
         const schema = readFileSync(schemaPath, 'utf8');
 
         // Execute schema
-        await pool.query(schema);
+        await DatabaseConnection.getInstance().query(schema);
         console.log('✅ Database schema initialized successfully');
 
         // Add some seed data if needed
@@ -21,13 +21,13 @@ async function initDatabase() {
         console.error('❌ Failed to initialize database:', error);
         process.exit(1);
     } finally {
-        await pool.end();
+        await DatabaseConnection.getInstance().end();
     }
 }
 
 async function seedDatabase() {
     // Add sample project
-    const projectResult = await pool.query(`
+    const projectResult = await DatabaseConnection.getInstance().query(`
         INSERT INTO projects (
             name, category, objective, main_deliverable, to_whom, due_date
         ) VALUES (
@@ -43,7 +43,7 @@ async function seedDatabase() {
     const projectId = projectResult.rows[0].id;
 
     // Add sample meeting
-    await pool.query(`
+    await DatabaseConnection.getInstance().query(`
         INSERT INTO meetings (
             project_id, meeting_name, date_time, attendees
         ) VALUES (

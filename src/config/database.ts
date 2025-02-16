@@ -1,49 +1,49 @@
-import { Pool, PoolClient, QueryResult } from 'pg';
+import { DatabaseConnection } from '@/db/connection';
+import { PoolClient } from 'pg';
 
-let pool: Pool;
+export type QueryParam = string | number | boolean | Date | string[] | null;
 
-if (typeof window === 'undefined') {
-    pool = new Pool({
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        host: process.env.DB_HOST,
-        port: Number(process.env.DB_PORT),
-        database: process.env.DB_NAME,
-    });
-}
-
-// Add error handling
-pool.on('error', (err) => {
-    console.error('Unexpected error on idle client', err);
-    process.exit(-1);
-});
-
-export const query = async (text: string, params?: (string | number | boolean | Date | null | string[])[]): Promise<QueryResult> => {
-    const client = await pool.connect();
-    try {
-        const start = Date.now();
-        const res = await client.query(text, params);
-        const duration = Date.now() - start;
-        console.log('Executed query', { text, duration, rows: res.rowCount });
-        return res;
-    } finally {
-        client.release();
-    }
+const dbConfig = {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432'),
+    database: process.env.DB_NAME || 'projects_db',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD,
 };
 
-export const transaction = async <T>(callback: (client: PoolClient) => Promise<T>) => {
-    const client = await pool.connect();
+try {
+    DatabaseConnection.initialize(dbConfig);
+} catch (error) {
+    console.error('Failed to initialize database connection:', error);
+}
+
+export async function query(text: string, params?: QueryParam[]) {
+    try {
+        const client = await DatabaseConnection.getInstance().connect();
+        try {
+            return await client.query(text, params);
+        } finally {
+            client.release();
+        }
+    } catch (error) {
+        console.error('Database query error:', error);
+        throw new Error('Database operation failed');
+    }
+}
+
+export async function transaction<T>(
+    callback: (client: PoolClient) => Promise<T>
+): Promise<T> {
+    const client = await DatabaseConnection.getInstance().connect();
     try {
         await client.query('BEGIN');
         const result = await callback(client);
         await client.query('COMMIT');
         return result;
-    } catch (e) {
+    } catch (error) {
         await client.query('ROLLBACK');
-        throw e;
+        throw error;
     } finally {
         client.release();
     }
-};
-
-export { pool }; 
+} 

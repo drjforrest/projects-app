@@ -1,3 +1,5 @@
+'use client';
+
 import { OutputForm } from '@/components/OutputForm';
 import { useProject } from '@/context/ProjectContext';
 

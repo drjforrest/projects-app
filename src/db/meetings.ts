@@ -30,13 +30,13 @@ export async function createMeeting(meetingData: Omit<DBMeeting, 'meeting_id' | 
         [
             project_id,
             meeting_name,
-            description,
+            description ?? null,
             attendees,
-            quick_notes,
+            quick_notes ?? null,
             date_time,
-            transcript_path,
-            summary_path,
-            summary_content
+            transcript_path ?? null,
+            summary_path ?? null,
+            summary_content ?? null
         ]
     );
 
@@ -134,7 +134,7 @@ export async function updateMeetingSummary(
         `UPDATE meetings 
         SET summary_content = $1, summary_path = $2 
         WHERE meeting_id = $3`,
-        [summary_content, summary_path, meetingId]
+        [summary_content ?? null, summary_path ?? null, meetingId]
     );
 }
 

@@ -1,6 +1,6 @@
 import { ProjectStartFormData } from '@/types/project';
 import { DBOutput, DBMeeting, ProjectRetrospective, DBProject } from '@/types/database';
-import { pool } from '@/config/database';
+import { DatabaseConnection } from '@/db/connection';
 
 // Project API calls
 export async function createProject(data: ProjectStartFormData) {
@@ -254,7 +254,7 @@ export async function getMeeting(id: number) {
 }
 
 export async function getActiveProjects(): Promise<DBProject[]> {
-    const result = await pool.query<DBProject>(
+    const result = await DatabaseConnection.getInstance().query<DBProject>(
         `SELECT 
             id,
             name,

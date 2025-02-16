@@ -89,7 +89,7 @@ export async function PUT(
                 `UPDATE projects 
                 SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP 
                 WHERE project_id = $${valueCounter}`,
-                values
+                values as string[]
             );
         }
 

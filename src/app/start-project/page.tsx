@@ -1,3 +1,5 @@
+'use client';
+
 import { ProjectStartForm } from '@/components/ProjectStartForm';
 import { ProjectStartFormData } from '@/types/project';
 

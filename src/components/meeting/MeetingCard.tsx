@@ -1,16 +1,17 @@
 import { motion } from 'framer-motion';
 import { CalendarIcon, ClockIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import type { Route } from 'next';
 import { DBMeeting } from '@/types/database';
 
-export function MeetingCard({ meeting }: { meeting: DBMeeting }) {
+export const MeetingCard = ({ meeting }: { meeting: DBMeeting }) => {
     return (
         <motion.div
             whileHover={{ scale: 1.02 }}
             className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
         >
             <Link 
-                href={`/meetings/${meeting.meeting_id}`}
+                href={`/meetings/${meeting.meeting_id}` as Route}
                 className="block p-6"
             >
                 <div className="flex justify-between items-start">
@@ -54,4 +55,4 @@ export function MeetingCard({ meeting }: { meeting: DBMeeting }) {
             </Link>
         </motion.div>
     );
-} 
+}; 

@@ -15,7 +15,9 @@ const defaultSettings: Settings = {
         defaultMilestoneInterval: 7,
         defaultMeetingDuration: 30,
         autoCreateMilestones: true,
-        reminderLeadTime: 2
+        reminderLeadTime: 2,
+        autoPromptFeedback: true,
+        retrospectiveTemplate: 'standard'
     },
     notifications: {
         emailNotifications: true,

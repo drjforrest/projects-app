@@ -52,7 +52,7 @@ export async function createProject(projectData: ProjectStartFormData) {
             JSON.stringify(milestones),
             JSON.stringify(resources),
             anticipatedDifficulty,
-            additionalNotes
+            additionalNotes ?? null
         ]
     );
 
